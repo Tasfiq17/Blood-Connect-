@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request List - Blood Connect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('{{ url_for('static', filename='images/001.jpg') }}') no-repeat center center/cover;
+            background-attachment: fixed;
+            color: #000;
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+            z-index: -1;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            z-index: 1001;
+        }
+        .header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            top: 60px;
+            left: -250px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+        .sidebar.active {
+            left: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            width: 100%;
+        }
+        .sidebar ul li {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            display: block;
+        }
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #d40000;
+        }
+        .page-header {
+            text-align: center;
+            margin-top: 80px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(50px);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #000;
+            transition: margin-left 0.3s ease;
+        }
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #d40000;
+            font-weight: bold;
+        }
+        .page-header p {
+            font-size: 18px;
+            color: #0a0a0a;
+            font-weight: bold;
+        }
+        .main-content {
+            margin-top: 20px;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+            transition: margin-left 0.3s ease;
+        }
+        .sidebar.active ~ .main-content, .sidebar.active ~ .page-header {
+            margin-left: 250px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 3px solid #0c0a0a;
+            font-size: 20px;
+            background: rgba(48, 46, 46, 0.7);
+            backdrop-filter: blur(50px);
+            color: #fff;
+        }
+        .request-list {
+            margin-top: 30px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .request-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(50px);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #000;
+            font-weight: bold;
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .request-card:hover {
+            transform: scale(1.05);
+        }
+        .request-card h3 {
+            color: #d40000;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1002;
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            color: #000;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #d40000;
+        }
+        .modal-content p {
+            margin: 10px 0;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            background: #d40000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .modal-content button:hover {
+            background: #b30000;
+        }
+    </style>
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+        function openRequestModal(name, bloodGroup, hospital, status) {
+            const modal = document.getElementById("requestModal");
+            const modalContent = document.getElementById("requestModalContent");
+            modalContent.innerHTML = `
+                <h2>${name}</h2>
+                <p><strong>Blood Group:</strong> ${bloodGroup}</p>
+                <p><strong>Hospital:</strong> ${hospital}</p>
+                <p><strong>Status:</strong> ${status}</p>
+                <button onclick="closeRequestModal()">Close</button>
+            `;
+            modal.style.display = "flex";
+        }
+        function closeRequestModal() {
+            document.getElementById("requestModal").style.display = "none";
+        }
+        function searchRequests() {
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            const requestCards = document.querySelectorAll(".request-card");
+            requestCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? "block" : "none";
+            });
+        }
+        {% if session['user_type'] != 'Admin' %}
+            window.location.href = "{{ url_for('login') }}";
+        {% endif %}
+    </script>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🩸🔗 Blood Connect</div>
+        <div class="icons">
+            <span class="menu-icon" onclick="toggleSidebar()">☰</span>
+        </div>
+    </div>
+    <div class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+            <li class="active"><a href="{{ url_for('request_list') }}">Request List</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </div>
+    <div class="page-header">
+        <h1>Request List</h1>
+        <p>View all blood requests and their current status.</p>
+    </div>
+    <div class="main-content">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by name, blood group, or hospital..." oninput="searchRequests()">
+        </div>
+        <div class="request-list" id="requestList">
+            {% for request in requests %}
+                <div class="request-card" onclick="openRequestModal('{{ request.name }}', '{{ request.blood_group }}', '{{ request.hospital }}', '{{ request.status }}')">
+                    <h3>{{ request.name }}</h3>
+                    <p>Blood Group: {{ request.blood_group }}</p>
+                    <p>Hospital: {{ request.hospital }}</p>
+                    <p>Status: {{ request.status }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="modal" id="requestModal">
+        <div class="modal-content" id="requestModalContent"></div>
+    </div>
+</body>
+</html>

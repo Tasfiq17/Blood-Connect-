@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Blood Connect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        header {
+            background: #111;
+            padding: 15px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .logo span {
+            color: red;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: red;
+        }
+        .contact-section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: url('{{ url_for('static', filename='images/home.jpg') }}') no-repeat center center/cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 50px;
+        }
+        .contact-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .contact-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            text-align: center;
+        }
+        .contact-content h1 {
+            font-size: 40px;
+            color: red;
+            margin-bottom: 20px;
+        }
+        .contact-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .contact-details {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .contact-details p {
+            margin: 10px 0;
+        }
+        .contact-details a {
+            color: red;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .contact-details a:hover {
+            text-decoration: underline;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+        .contact-form textarea {
+            height: 100px;
+        }
+        .contact-form button {
+            background: red;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .contact-form button:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><span>🩸🔗</span>Blood Connect</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('why_bc') }}">Why Blood Connect?</a></li>
+                <li><a href="{{ url_for('guide') }}">Need Guidance?</a></li>
+                <li><a href="{{ url_for('login') }}" class="login-btn">Login / Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="contact-section">
+        <div class="contact-content">
+            <h1>Contact Us</h1>
+            <p>Have questions, suggestions, or need assistance? We’re here to help! Get in touch with us.</p>
+
+            <div class="contact-details">
+                <p><strong>📍 Address:</strong> East Delta University, Chittagong, Bangladesh</p>
+                <p><strong>📞 Phone:</strong> <a href="tel:+8801316343922">+880 1316343922</a></p>
+                <p><strong>📞 Support:</strong> <a href="tel:+8801771880595">+880 1771880595</a></p>
+                <p><strong>✉ Email:</strong> <a href="mailto:bloodconnect@gmail.com">bloodconnect@gmail.com</a></p>
+            </div>
+
+            
+        </div>
+    </section>
+</body>
+</html>

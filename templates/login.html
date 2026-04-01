@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Connect - Login/Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('{{ url_for('static', filename='images/home.jpg') }}') no-repeat center center/cover;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px; /* Push the entire body down */
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay for better readability */
+        }
+        header {
+            background: #111;
+            padding: 15px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .logo span {
+            color: red;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: red;
+        }
+        .login-btn {
+            background: red;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .login-btn:hover {
+            background: darkred;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Use min-height to avoid cutting content */
+            padding-top: 60px; /* Push it below the header */
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+        .form-box {
+            width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            text-align: center;
+            border: 1px solid red;
+        }
+        h2 {
+            margin-bottom: 15px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid red;
+            border-radius: 5px;
+            background: transparent;
+            color: white;
+            transition: 0.3s;
+        }
+        input:hover, select:hover {
+            border-color: white;
+            background: #222;
+        }
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkred;
+        }
+        a {
+            color: red;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .address-container {
+            position: relative;
+        }
+        .address-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid red;
+            z-index: 10;
+        }
+        .address-popup input {
+            margin: 5px 0;
+        }
+        .address-popup input[readonly] {
+            background: #444;
+            cursor: not-allowed;
+        }
+        .error {
+            color: #ff5555;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><span>🩸🔗</span>Blood Connect</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('why_bc') }}">Why Blood Connect?</a></li>
+                <li><a href="{{ url_for('guide') }}">Need Guidance?</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                <li><a href="{{ url_for('login') }}" class="login-btn">Login / Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-box" id="loginForm" style="{{ 'display: none;' if show_register else 'display: block;' }}">
+            <h2>Login</h2>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="text" id="loginEmail" name="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" name="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="javascript:void(0)" id="switchToRegister">Register here</a></p>
+        </div>
+
+        <div class="form-box" id="registerForm" style="{{ 'display: block;' if show_register else 'display: none;' }}">
+            <h2>Register</h2>
+            {% if register_error %}
+                <p class="error">{{ register_error }}</p>
+            {% endif %}
+            <form method="POST" action="{{ url_for('register') }}">
+                <input type="text" id="registerName" name="registerName" placeholder="Full Name" required>
+                <input type="email" id="registerEmail" name="registerEmail" placeholder="Email" required>
+                <input type="tel" id="registerPhone" name="registerPhone" placeholder="Phone Number" required>
+                <input type="date" id="registerDOB" name="registerDOB" required>
+                <select id="registerGender" name="registerGender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <select id="registerBloodGroup" name="registerBloodGroup" required>
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="B+">B+</option>
+                    <option value="O+">O+</option>
+                    <option value="AB+">AB+</option>
+                    <option value="A-">A-</option>
+                    <option value="B-">B-</option>
+                    <option value="O-">O-</option>
+                    <option value="AB-">AB-</option>
+                </select>
+                <div class="address-container">
+                    <input type="text" id="address" name="address" placeholder="Enter your address" readonly onclick="toggleAddressPopup()">
+                    <div class="address-popup" id="addressPopup">
+                        <input type="text" id="street" placeholder="Street">
+                        <input type="text" id="area" placeholder="Area">
+                        <input type="text" id="policeStation" placeholder="Police Station">
+                        <input type="text" value="Chattogram" readonly>
+                    </div>
+                </div>
+                <select id="registerUserType" name="registerUserType" required>
+                    <option value="Donor">Donor</option>
+                    <option value="Receiver">Receiver</option>
+                </select>
+                <input type="password" id="registerPassword" name="registerPassword" placeholder="Password" required>
+                <input type="password" id="registerConfirmPassword" name="registerConfirmPassword" placeholder="Confirm Password" required>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="javascript:void(0)" id="switchToLogin">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle address popup
+        function toggleAddressPopup() {
+            const popup = document.getElementById('addressPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close address popup when clicking outside
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('addressPopup');
+            const addressInput = document.getElementById('address');
+            if (event.target !== addressInput && !popup.contains(event.target)) {
+                popup.style.display = 'none';
+            }
+        });
+
+        // Update address field when popup inputs change
+        document.getElementById('addressPopup').addEventListener('input', function() {
+            const street = document.getElementById('street').value;
+            const area = document.getElementById('area').value;
+            const policeStation = document.getElementById('policeStation').value;
+            const address = `${street}, ${area}, ${policeStation}, Chattogram`;
+            document.getElementById('address').value = address;
+        });
+
+        // Switch between login and register forms
+        document.getElementById('switchToRegister').addEventListener('click', function() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        });
+        document.getElementById('switchToLogin').addEventListener('click', function() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        });
+
+        // Validate password match on registration form submission
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
+    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</body>
+</html>

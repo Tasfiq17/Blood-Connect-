@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Blood Connect?</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        header {
+            background: #111;
+            padding: 15px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .logo span {
+            color: red;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: red;
+        }
+        .content {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: url('{{ url_for('static', filename='images/home.jpg') }}') no-repeat center center/cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 100px 50px;
+            overflow-y: auto;
+        }
+        .content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .content h1, .content h2, .content p {
+            position: relative;
+            z-index: 1;
+        }
+        .content h1 {
+            font-size: 42px;
+            color: red;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .content h2 {
+            font-size: 30px;
+            color: #ff4444;
+            margin-top: 30px;
+            text-transform: uppercase;
+        }
+        .content p {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            max-width: 900px;
+            text-align: justify;
+        }
+        .highlight {
+            color: #ff4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><span>🩸🔗</span>Blood Connect</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('guide') }}">Need Guidance?</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                <li><a href="{{ url_for('login') }}" class="login-btn">Login / Register</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="content">
+        <h1>Why Blood Connect?</h1>
+        <p><span class="highlight">Blood Connect</span> was developed to solve one of the most <b>urgent</b> problems in healthcare: the <b>shortage of blood donations</b>. Every day, thousands of lives depend on a <b>single donation</b>. Yet, many struggle to find a donor on time. <br><br>
+        <b>We believe in changing this!</b> Blood Connect is here to make donations <b>quick, easy, and life-saving.</b></p>
+
+        <h2>🌟 The Importance of Blood Donation</h2>
+        <p>Blood is the <b>lifeline of the human body</b>, yet it <b>cannot</b> be created artificially. It must come from <b>generous donors</b> willing to give a small part of themselves to save lives. <br><br>
+        🏥 Every <b>2 seconds</b>, someone in the world needs <b>a blood transfusion</b>. From accident victims to cancer patients, blood donation is often the difference between <b>life and death</b>.</p>
+        <p><b>One unit of blood can save up to three lives!</b> 🩸 When you donate, you are not just helping one person—you are <b>giving life to many</b>.</p>
+
+        <h2>💡 How Blood Connect Works</h2>
+        <p>Finding the right donor at the right time can be <b>difficult</b>. This is why Blood Connect is built to be <b>fast, smart, and accessible</b>. <br><br>
+        🩸 <b>Donors</b> register and update their availability. <br>
+        🔎 <b>Recipients</b> request blood, and the system finds a match <b>instantly</b>. <br>
+        💬 <b>Real-time updates</b> ensure quick responses for urgent cases.</p>
+        <p>With <b>location-based donor search</b>, <b>secure messaging</b>, and <b>instant notifications</b>, Blood Connect <b>eliminates delays</b> and makes sure <b>no life is lost due to lack of blood.</b></p>
+
+        <h2>❤️ A Platform Built for the Community</h2>
+        <p>Blood Connect is more than just a <b>website</b> – it’s a <b>movement</b>. A movement to create a world where <b>no one has to beg for blood in a crisis.</b></p>
+        <p>We are <b>building a network</b> of heroes who understand that <b>every drop counts</b>. The more people join, the stronger the network gets, and the more lives we save!</p>
+
+        <h2>💪 Join the Blood Connect Movement</h2>
+        <p>👥 <b>Be part of something bigger than yourself!</b> Whether you donate, register, or spread the word, you are playing a role in saving lives.</p>
+        <p>🏆 <b>Be a hero today!</b> Click <b>Register</b> and make your first donation. The world needs more people like you. 💖</p>
+    </section>
+</body>
+</html>

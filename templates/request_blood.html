@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Blood - Blood Connect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('{{ url_for('static', filename='images/1.jpg') }}') no-repeat center center/cover;
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+        .form-container {
+            background: rgba(4, 4, 4, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid #d40000;
+        }
+        .form-container h1 {
+            color: #d40000;
+            margin-bottom: 20px;
+            font-size: 36px;
+        }
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-container input, .form-container select, .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #0c0a0a;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            color: #000;
+            font-size: 16px;
+        }
+        .form-container button {
+            padding: 10px;
+            background: #d40000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .form-container button:hover {
+            background: #b30000;
+        }
+        .error {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Request Blood</h1>
+        <form method="POST" action="{{ url_for('request_blood') }}">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="tel" name="contact" placeholder="Contact Number (11 digits)" pattern="\d{11}" required>
+            <select name="blood-group" required>
+                <option value="">Select Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+            </select>
+            <input type="text" name="hospital" placeholder="Location/Hospital Name" required>
+            <input type="date" name="date" min="{{ today }}" required>
+            <select name="urgency" required>
+                <option value="">Select Urgency</option>
+                <option value="Normal">Normal</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Critical">Critical</option>
+            </select>
+            <textarea name="notes" placeholder="Additional Notes (optional)"></textarea>
+            <button type="submit">Submit Request</button>
+        </form>
+    </div>
+</body>
+</html>

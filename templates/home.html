@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Connect - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        header {
+            background: #111;
+            padding: 15px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .logo span {
+            color: red;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: red;
+        }
+        .login-btn {
+            background: red;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .login-btn:hover {
+            background: darkred;
+        }
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: url('{{ url_for('static', filename='images/home.jpg') }}') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .hero h1 {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero .cta-buttons {
+            display: flex;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .cta-buttons a {
+            background: red;
+            color: #fff;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        .cta-buttons a:hover {
+            background: darkred;
+        }
+        #login-message {
+            display: none;
+            background: red;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><span>🩸🔗</span>Blood Connect</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('guide') }}">Need Guidance?</a></li>
+                <li><a href="{{ url_for('why_bc') }}">Why Blood Connect?</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                <li><a href="{{ url_for('login') }}" class="login-btn">Login / Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Every Drop Counts,<br>Every Life Matters.</h1>
+        <div class="cta-buttons">
+            <a href="{{ url_for('login') }}?message=login_required"><i class="fa fa-gift"></i> Donate Blood</a>
+            <a href="{{ url_for('login') }}?message=login_required"><i class="fa fa-search"></i> Seek Blood</a>
+        </div>
+        <div id="login-message">
+            You must log in first.
+        </div>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get("message") === "login_required") {
+                    document.getElementById("login-message").style.display = "block";
+                }
+            });
+        </script>
+    </section>
+    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</body>
+</html>

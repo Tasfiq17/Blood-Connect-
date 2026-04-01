@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Blood - Blood Connect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="script/script.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/donate-bg.jpg') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+        }
+        .form-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.5);
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+            color: #ff0303;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group select option {
+        color: black; /* Text color for Blood Group dropdown */
+    }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+        .btn {
+            background: #ff0303;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Donate Blood</h2>
+        <form id="donation-form">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+                <p class="error" id="name-error">Name is required</p>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" required>
+                <p class="error" id="age-error">Age must be between 18 and 65</p>
+            </div>
+            <div class="form-group">
+                <label for="blood-group">Blood Group</label>
+                <select id="blood-group" name="blood-group" required>
+                    <option value="">Select</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+                <p class="error" id="blood-group-error">Please select your blood group</p>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact Number</label>
+                <input type="text" id="contact" name="contact" required>
+                <p class="error" id="contact-error">Enter a valid contact number (11 digits)</p>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" required>
+                <p class="error" id="address-error">Address is required</p>
+            </div>
+            <div class="form-group">
+                <label for="last-donation">Last Donation Date</label>
+                <input type="date" id="last-donation" name="last-donation">
+                <p class="error" id="date-error">Date cannot be in the future</p>
+            </div>
+            <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" name="notes" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn" disabled>Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("donation-form");
+            const submitBtn = form.querySelector(".btn");
+            
+            const nameInput = document.getElementById("name");
+            const ageInput = document.getElementById("age");
+            const bloodGroupInput = document.getElementById("blood-group");
+            const contactInput = document.getElementById("contact");
+            const addressInput = document.getElementById("address");
+            const lastDonationInput = document.getElementById("last-donation");
+
+            function validateForm() {
+                let valid = true;
+
+                if (nameInput.value.trim() === "") {
+                    document.getElementById("name-error").style.display = "block";
+                    valid = false;
+                } else document.getElementById("name-error").style.display = "none";
+
+                const age = parseInt(ageInput.value);
+                if (isNaN(age) || age < 18 || age > 65) {
+                    document.getElementById("age-error").style.display = "block";
+                    valid = false;
+                } else document.getElementById("age-error").style.display = "none";
+
+                if (bloodGroupInput.value === "") {
+                    document.getElementById("blood-group-error").style.display = "block";
+                    valid = false;
+                } else document.getElementById("blood-group-error").style.display = "none";
+
+                const contactPattern = /^[0-9]{11}$/;
+                if (!contactPattern.test(contactInput.value)) {
+                    document.getElementById("contact-error").style.display = "block";
+                    valid = false;
+                } else document.getElementById("contact-error").style.display = "none";
+
+                if (addressInput.value.trim() === "") {
+                    document.getElementById("address-error").style.display = "block";
+                    valid = false;
+                } else document.getElementById("address-error").style.display = "none";
+
+                const today = new Date().toISOString().split("T")[0];
+                if (lastDonationInput.value && lastDonationInput.value > today) {
+                    document.getElementById("date-error").style.display = "block";
+                    valid = false;
+                } else document.getElementById("date-error").style.display = "none";
+
+                submitBtn.disabled = !valid;
+            }
+
+            form.addEventListener("input", validateForm);
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault(); 
+
+                localStorage.setItem("donationSuccess", "Thank you for donating blood! Your contribution can save lives. ❤️");
+
+                alert("Form submitted successfully! Redirecting to Dashboard...");
+                window.location.href = "dashboard.html";
+            });
+        });
+    </script>
+</body>
+</html>

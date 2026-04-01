@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Blood Connect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+        }
+
+        body {
+            background: url('{{ url_for('static', filename='images/home.jpg') }}') no-repeat center center/cover;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        /* Header Styling */
+        header {
+            background: #111;
+            padding: 15px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid red;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .logo span {
+            color: red;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: red;
+        }
+
+        .sidebar-toggle {
+            background: red;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .notification-icon {
+            background: red;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            display: none;
+        }
+
+        /* Sidebar */
+        .sidebar-menu {
+            position: fixed;
+            top: 90px;
+            left: -250px;
+            width: 250px;
+            height: calc(100vh - 90px);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            transition: left 0.3s ease;
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu ul li {
+            margin: 20px 0;
+        }
+
+        .sidebar-menu ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .sidebar-menu ul li a:hover {
+            color: red;
+        }
+
+        /* Notification Sidebar */
+        .notification-sidebar {
+            position: fixed;
+            top: 90px;
+            right: -300px;
+            width: 300px;
+            height: calc(100vh - 90px);
+            background: rgba(34, 34, 34, 0.95);
+            padding: 20px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .notification-sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: red;
+        }
+
+        .notification-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .notification-sidebar ul li {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .new-notification {
+    color: red;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.notification-sidebar ul li small {
+    display: block;
+    color: #ccc;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.notification-sidebar ul li.unread {
+    background: rgba(255, 0, 0, 0.1);
+    border-left: 3px solid red;
+    padding-left: 7px;
+}
+
+        /* Dashboard Content */
+        .dashboard {
+            width: 80%;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            color: #000;
+        }
+
+        .dashboard h2 {
+            font-size: 28px;
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .box h3 {
+            font-size: 22px;
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        .box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .box ul li {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .btn {
+            background: red;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: darkred;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        body.sidebar-active .dashboard {
+            margin-left: 250px;
+        }
+
+        body.notification-active .dashboard {
+            margin-right: 300px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo"><span>🩸🔗</span>Blood Connect</div>
+        <nav>
+            <ul>
+                
+                <li><div class="sidebar-toggle" onclick="toggleMenu()">☰</div></li>
+                <li><div class="notification-icon" onclick="toggleNotificationSidebar()">🔔<span class="notification-dot" id="notificationDot"></span></div></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-menu" id="sidebar">
+        <ul>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="{{ url_for('find_donor') }}">Find a Donor</a></li>
+            <li><a href="{{ url_for('request_blood') }}">Request Blood</a></li>
+            <li><a href="{{ url_for('settings') }}">Settings</a></li>
+            <li><a href="{{ url_for('logout') }}" class="btn">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Notification Sidebar -->
+    <div class="notification-sidebar" id="notificationSidebar">
+        <h2>Blood Requests</h2>
+        <ul id="notificationList">
+            {% if notifications %}
+                {% for notification in notifications %}
+                    <li class="{% if not notification.is_read %}unread{% endif %}">
+                        {{ notification.message }}
+                        <small>{{ notification.created_at|datetimeformat('%Y-%m-%d %H:%M') }}</small>
+                        {% if not notification.is_read %}
+                            <span class="new-notification">New</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>No active blood requests</li>
+            {% endif %}
+        </ul>
+        <button class="btn" onclick="toggleNotificationSidebar()">Close</button>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <section class="dashboard">
+        <h2>Welcome, {{ user.name }}</h2>
+        <p>Manage your blood donation activities below.</p>
+
+        <div class="buttons-container">
+            <button class="btn" onclick="window.location.href='{{ url_for('request_blood') }}'">Seek Blood</button>
+            
+        </div>
+
+        <div class="box" id="userInfo">
+            <h3>User Information</h3>
+            <ul>
+                <li>Name: {{ user.name }}</li>
+                <li>Email: {{ user.email }}</li>
+                <li>Phone: {{ user.phone }}</li>
+                <li>Blood Group: {{ user.blood_group }}</li>
+                <li>Address: {{ user.address }}</li>
+                <li>User Type: {{ user.user_type }}</li>
+            </ul>
+        </div>
+
+        <div class="box" id="requests">
+            <h3>My Requests</h3>
+            <ul>
+                {% if requests %}
+                    {% for req in requests %}
+                        <li>{{ req.blood_group }} needed by {{ req.required_date }} - {{ req.status }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>No active requests.</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="box" id="findDonor">
+            <h3>Find a Donor</h3>
+            <p>Search for available donors by blood type or location.</p>
+            <button class="btn" onclick="window.location.href='{{ url_for('find_donor') }}'">Search Now</button>
+        </div>
+    </section>
+
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById("sidebar");
+            const body = document.body;
+            sidebar.style.left = sidebar.style.left === "0px" ? "-250px" : "0px";
+            body.classList.toggle("sidebar-active");
+        }
+    
+        function toggleNotificationSidebar() {
+            const sidebar = document.getElementById("notificationSidebar");
+            const body = document.body;
+            sidebar.style.right = sidebar.style.right === "0px" ? "-300px" : "0px";
+            body.classList.toggle("notification-active");
+            
+            // Mark notifications as read when sidebar is opened
+            if (sidebar.style.right === "0px") {
+                fetch('/mark_notifications_read', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin'
+                }).then(response => {
+                    if (response.ok) {
+                        document.getElementById("notificationDot").style.display = "none";
+                    }
+                });
+            }
+        }
+    
+        function checkForRequests() {
+            fetch('/check_notifications')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationDot = document.getElementById("notificationDot");
+                    notificationDot.style.display = data.hasUnread ? "block" : "none";
+                });
+        }
+    
+        document.addEventListener("click", function(event) {
+            const sidebar = document.getElementById("sidebar");
+            const toggleBtn = document.querySelector(".sidebar-toggle");
+            const notificationSidebar = document.getElementById("notificationSidebar");
+            const notificationIcon = document.querySelector(".notification-icon");
+    
+            if (sidebar.style.left === "0px" && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                sidebar.style.left = "-250px";
+                document.body.classList.remove("sidebar-active");
+            }
+    
+            if (notificationSidebar.style.right === "0px" && !notificationSidebar.contains(event.target) && !notificationIcon.contains(event.target)) {
+                notificationSidebar.style.right = "-300px";
+                document.body.classList.remove("notification-active");
+            }
+        });
+    
+        document.addEventListener("DOMContentLoaded", checkForRequests);
+    </script>
+</body>
+</html>

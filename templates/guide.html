@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Connect - User Guide</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold; /* Making all text bold */
+        }
+        body {
+            background: url('{{ url_for('static', filename='images/home.jpg') }}') no-repeat center center/cover;
+            color: black; /* Black text for readability */
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 100px;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: -1;
+        }
+        .guide-container {
+            max-width: 850px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgb(40, 147, 186);
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px) brightness(1.1);
+            background: rgba(255, 0, 0, 0.1); /* Light red transparent background */
+            box-shadow: 0 0 20px rgb(10, 138, 185);
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .guide-container h2 {
+            font-size: 34px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgb(5, 5, 5);
+            color: rgb(251, 247, 247);
+        }
+        .step {
+            background: rgba(30, 30, 30, 0.5); /* Semi-transparent glass effect */
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid rgb(47, 174, 191);
+            text-align: left;
+            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(15px);
+        }
+        .step:hover {
+            background: rgba(50, 50, 50, 0.7);
+            transform: scale(1.02);
+            box-shadow: 0 0 12px rgb(252, 250, 250);
+        }
+        .step h3 {
+            font-size: 22px;
+            color: rgb(251, 248, 248); /* Pure red subheadings */
+        }
+        .step p {
+            margin-left: 15px;
+            font-size: 16px;
+            color: rgb(251, 247, 247); /* Black text */
+        }
+        /* Header Styling */
+        header {
+            background: black;
+            padding: 15px 50px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgb(0, 170, 255);
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: rgb(247, 246, 246);
+        }
+        .logo span {
+            color: rgb(250, 245, 245);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: rgb(250, 247, 247);
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><span>🩸🔗</span>Blood Connect</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('why_bc') }}">Why Blood Connect?</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                <li><a href="{{ url_for('login') }}" class="login-btn">Login / Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="guide-container">
+        <h2>📖 Blood Connect User Guide</h2>
+        
+        <div class="step">
+            <h3>1️⃣ Sign Up / Login</h3>
+            <p>Create an account using your email and log in to access features.</p>
+        </div>
+
+        <div class="step">
+            <h3>2️⃣ Find Blood / Request Blood</h3>
+            <p>Search for donors based on blood group & location. If needed, request blood.</p>
+        </div>
+
+        <div class="step">
+            <h3>3️⃣ Donate Blood</h3>
+            <p>View donation requests & help those in need.</p>
+        </div>
+
+        <div class="step">
+            <h3>4️⃣ Track Your Donations</h3>
+            <p>Monitor your blood donation history & impact.</p>
+        </div>
+
+        <div class="step">
+            <h3>5️⃣ Contact Support</h3>
+            <p>Need help? Reach out via the "Contact Us" page.</p>
+        </div>
+    </div>
+
+</body>
+</html>
